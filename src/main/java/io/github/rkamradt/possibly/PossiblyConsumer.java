@@ -75,7 +75,7 @@ public class PossiblyConsumer<T> implements Consumer<T> {
     }
     /** 
      * Override of the Consumer.accept
-     * @param value
+     * @param value the value to accept
      */
     @Override
     public void accept(T value) {

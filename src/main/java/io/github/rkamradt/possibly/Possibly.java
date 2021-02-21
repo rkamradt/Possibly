@@ -42,11 +42,11 @@ import java.util.stream.Stream;
  *
  * <p>For example the code 
  *
- * <pre>Stream.generate(PossiblySupplier.of(() -> nis.read()))</pre>
+ * <pre>Stream.generate(PossiblySupplier.of(() -&gt; nis.read()))</pre>
  * 
  * will create a 
  * 
- * <pre>Stream&lt;Possibly&lt;Integer&gt;&gt</pre>
+ * <pre>Stream&lt;Possibly&lt;Integer&gt;&gt;</pre>
  * 
  * despite the fact that read could throw an IOException. In this case the
  * PossiblySupplier type is designed to create a 
@@ -168,7 +168,7 @@ public class Possibly<T> {
     /**
      * Predicate function to check for an empty Possibly (one with no
      * value and no exception)
-     * @return 
+     * @return true if both value and exception are null
      */
     public boolean isEmpty() {
         return value == null && exception == null;
