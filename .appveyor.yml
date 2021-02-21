@@ -1,0 +1,14 @@
+image: Ubuntu
+stack: jdk 11
+build_script:
+- mvn install
+cache:
+- /home/appveyor/.m2/repository/ -> pom.xml
+artifacts:
+  - path: target/product-file-mapper-1.0-SNAPSHOT.jar
+    name: ProductFileMapper 1.0 Snapshot
+  - path: target/product-file-mapper-1.0-SNAPSHOT-sources.jar
+    name: ProductFileMapper Source 1.0 Snapshot
+on_finish:
+  - sh: |
+      find "$APPVEYOR_BUILD_FOLDER" -type f -name 'TEST*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"
