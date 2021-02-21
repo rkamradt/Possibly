@@ -23,62 +23,65 @@
  */
 package io.github.rkamradt.possibly;
 
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 /**
- * A replacement for Supplier that will return a Possibly to contain a value
+ * A replacement for Consumer that will return a Possibly to contain a value
  * or an exception.This will allow using methods that throw a checked
  exception to be used in a lambda
  * @author randal kamradt
- * @param <T> the type to supply
+ * @param <T> the type to accept
  * @since 1.0.0
  */
-public class PossiblySupplier<T> implements Supplier<Possibly<T>> {
+public class PossiblyConsumer<T> implements Consumer<T> {
     /**
-     * Replacement for Supplier type except it adds throws Exception to the get method.
+     * Replacement for Consumer type except it adds throws Exception to the accept method.
      * Used to allow a method that throws a function. This class wraps this
      * interface to create a Possibly type with a value or and exception
      */
-    private final ExceptionSupplier<T> f;
+    private final ExceptionConsumer<T> f;
+    private final Consumer<Exception> e; 
     /** 
-     * Create a PossiblySuppier that wraps the ExceptionSuppier
-     * @param f the ExceptionSupplier to wrap
+     * Create a PossiblySuppier that wraps the ExceptionConsumer
+     * @param f the ExceptionConsumer to wrap
      */
-    private PossiblySupplier(final ExceptionSupplier<T> f) {
+    private PossiblyConsumer(final ExceptionConsumer<T> f,
+            final Consumer<Exception> e) {
         this.f = f;
+        this.e = e;
     }
     /**
-     * used to publicly create a PossiblySupplier
-     * @param <T> The type of value to supply that will be wrapped in a Possibly
-     * @param f The wrapped supplier
-     * @return A new PossiblySupplier
+     * used to publicly create a PossiblyConsumer
+     * @param <T> The type of value to accept
+     * @param f The wrapped Consumer
+     * @param e a consumer for exceptions
+     * @return A new PossiblyConsumer
      */
-     static <T> PossiblySupplier<T> of(final ExceptionSupplier<T> f) {
-        return new PossiblySupplier<>(f);
+     static <T> PossiblyConsumer<T> of(final ExceptionConsumer<T> f,
+             final Consumer<Exception> e) {
+        return new PossiblyConsumer<>(f, e);
     }
     /** 
-     * Override of the Supplier.get
-     * @return A Possibly with the mapped value or an exception
+     * Override of the Consumer.accept
+     * @param value
      */
     @Override
-    public Possibly<T> get() {
+    public void accept(T value) {
         try {
-            return Possibly.of(f.get());
-        } catch (Exception e) {
-            return Possibly.of(e);
+            f.accept(value);
+        } catch (Exception ex) {
+            e.accept(ex);
         }
     }
     /**
-     * A Supplier that allows checked exceptions
-     * @param <T> The type of value to supply
+     * @param <T> The type of value to accept
      */
     @FunctionalInterface
-    interface ExceptionSupplier<T> {
+    interface ExceptionConsumer<T> {
         /**
-         * Get a value from the supplier
-         * @return the supplied value
+         * accept a value
          * @throws Exception to be caught by the wrapping class
          */
-        T get() throws Exception;
+        void accept(T value) throws Exception;
     }
 }
