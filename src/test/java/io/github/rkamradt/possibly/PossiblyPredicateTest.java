@@ -23,6 +23,9 @@
  */
 package io.github.rkamradt.possibly;
 
+import static io.github.rkamradt.possibly.PossiblyConsumerTest.BAD_VALUE;
+import static io.github.rkamradt.possibly.PossiblyConsumerTest.GOOD_VALUE;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,26 +36,31 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author randalkamradt
  */
-public class PossiblyConsumerTest {
+public class PossiblyPredicateTest {
     public static final String GOOD_VALUE = "good";
     public static final String BAD_VALUE = "bad";
-    public PossiblyConsumerTest() {
+    public PossiblyPredicateTest() {
     }
 
     @Test
-    public void testAccept() {
+    public void testTest() {
+        System.out.println("test");
         System.out.println("accept");
         AtomicReference<Exception> ex = new AtomicReference();
-        Stream.of(GOOD_VALUE, BAD_VALUE)
-                .peek(PossiblyConsumer.of(s -> mapWithException(s), e -> ex.set(e)))
+        List<String> list = Stream.of(GOOD_VALUE, BAD_VALUE)
+                .filter(PossiblyPredicate.of(s -> mapWithException(s), e -> ex.set(e)))
                 .collect(Collectors.toList());
         assertEquals("bad value", ex.get().getMessage());
-        Stream.of(GOOD_VALUE, BAD_VALUE) // test with null exception consumer
-                .peek(PossiblyConsumer.of(s -> mapWithException(s)))
+        assertEquals(1, list.size());
+        assertEquals(GOOD_VALUE, list.get(0));
+        list = Stream.of(GOOD_VALUE, BAD_VALUE) // test with null exception consumer
+                .filter(PossiblyPredicate.of(s -> mapWithException(s)))
                 .collect(Collectors.toList());
+        assertEquals(1, list.size());
+        assertEquals(GOOD_VALUE, list.get(0));
         try {
             Stream.of(GOOD_VALUE, BAD_VALUE)
-                .peek(PossiblyConsumer.of(s -> mapWithException(s), 
+                .filter(PossiblyPredicate.of(s -> mapWithException(s), 
                         e -> {
                             throw new RuntimeException("runtime exception", e);
                 }))
@@ -64,9 +72,10 @@ public class PossiblyConsumerTest {
         }
     }
     
-    private void mapWithException(String value) throws Exception {
+    private boolean mapWithException(String value) throws Exception {
         if("bad".equals(value)) {
             throw new Exception("bad value");
         }
+        return true;
     }
 }

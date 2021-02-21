@@ -44,6 +44,7 @@ public class PossiblyConsumer<T> implements Consumer<T> {
     /** 
      * Create a PossiblySuppier that wraps the ExceptionConsumer
      * @param f the ExceptionConsumer to wrap
+     * @param e a Consumer to do something with an exception
      */
     private PossiblyConsumer(final ExceptionConsumer<T> f,
             final Consumer<Exception> e) {
@@ -51,7 +52,8 @@ public class PossiblyConsumer<T> implements Consumer<T> {
         this.e = e;
     }
     /**
-     * used to publicly create a PossiblyConsumer
+     * used to publicly create a PossiblyConsumer with a consumer to do something
+     * with any thrown exceptions
      * @param <T> The type of value to accept
      * @param f The wrapped Consumer
      * @param e a consumer for exceptions
@@ -60,6 +62,15 @@ public class PossiblyConsumer<T> implements Consumer<T> {
      static <T> PossiblyConsumer<T> of(final ExceptionConsumer<T> f,
              final Consumer<Exception> e) {
         return new PossiblyConsumer<>(f, e);
+    }
+    /**
+     * used to publicly create a PossiblyConsumer that throws away any exceptions
+     * @param <T> The type of value to accept
+     * @param f The wrapped Consumer
+     * @return A new PossiblyConsumer
+     */
+     static <T> PossiblyConsumer<T> of(final ExceptionConsumer<T> f) {
+        return new PossiblyConsumer<>(f, null);
     }
     /** 
      * Override of the Consumer.accept
@@ -70,7 +81,8 @@ public class PossiblyConsumer<T> implements Consumer<T> {
         try {
             f.accept(value);
         } catch (Exception ex) {
-            e.accept(ex);
+            if(e != null)
+                e.accept(ex);
         }
     }
     /**
