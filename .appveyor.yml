@@ -1,5 +1,5 @@
 image: Ubuntu
-stack: jdk 11
+stack: jdk 8
 build_script:
 - mvn install
 cache:
