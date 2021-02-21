@@ -26,17 +26,40 @@ package io.github.rkamradt.possibly;
 import java.util.function.Supplier;
 
 /**
- *
- * @author randalkamradt
+ * A replacement for Supplier that will return a Possibly to contain a value
+ * or an exception.This will allow using methods that throw a checked
+ exception to be used in a lambda
+ * @author randal kamradt
+ * @param <T> the type to supply
+ * @since 1.0.0
  */
 public class PossiblySupplier<T> implements Supplier<Possibly<T>> {
+    /**
+     * Replacement for Supplier type except it adds throws Exception to the get method.
+     * Used to allow a method that throws a function. This class wraps this
+     * interface to create a Possibly type with a value or and exception
+     */
     private final ExceptionSupplier<T> f;
+    /** 
+     * Create a PossiblySuppier that wraps the ExceptionSuppier
+     * @param f the ExceptionSupplier to wrap
+     */
     private PossiblySupplier(final ExceptionSupplier<T> f) {
         this.f = f;
     }
-    static <T> PossiblySupplier<T> of(final ExceptionSupplier<T> f) {
+    /**
+     * used to publicly create a PossiblySupplier
+     * @param <T> The type of value to supply that will be wrapped in a Possibly
+     * @param f The wrapped supplier
+     * @return A new PossiblySupplier
+     */
+     static <T> PossiblySupplier<T> of(final ExceptionSupplier<T> f) {
         return new PossiblySupplier<>(f);
     }
+    /** 
+     * Override of the Supplier.get
+     * @return A Possibly with the mapped value or an exception
+     */
     @Override
     public Possibly<T> get() {
         try {
@@ -45,7 +68,17 @@ public class PossiblySupplier<T> implements Supplier<Possibly<T>> {
             return Possibly.of(e);
         }
     }
-}
-interface ExceptionSupplier<T> {
-    T get() throws Exception;
+    /**
+     * A Function that allows checked exceptions
+     * @param <T> The type of value to supply
+     */
+    @FunctionalInterface
+    interface ExceptionSupplier<T> {
+        /**
+         * Get a value from the supplier
+         * @return the supplied value
+         * @throws Exception to be caught by the wrapping class
+         */
+        T get() throws Exception;
+    }
 }
