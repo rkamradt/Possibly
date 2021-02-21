@@ -27,9 +27,10 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * A replacement for Predicate that will return a Possibly to contain a value
- * or an exception.This will allow using methods that throw a checked
- exception to be used in a lambda
+ * A replacement for Predicate that will execute a Consumer&lt;Exception&gt;
+ * if it throws an error. This will allow using methods that throw a checked
+ * exception to be used in a lambda. If the Exception Consumer throws a 
+ * unchecked exception, that exception will ripple through.
  * @author randal kamradt
  * @param <T> the type to test
  * @since 1.0.0

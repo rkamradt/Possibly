@@ -26,9 +26,10 @@ package io.github.rkamradt.possibly;
 import java.util.function.Consumer;
 
 /**
- * A replacement for Consumer that will return a Possibly to contain a value
- * or an exception.This will allow using methods that throw a checked
- exception to be used in a lambda
+ * A replacement for Consumer that will execute a Consumer&lt;Exception&gt;
+ * if it throws an error. This will allow using methods that throw a checked
+ * exception to be used in a lambda. If the Exception Consumer throws a 
+ * unchecked exception, that exception will ripple through
  * @author randal kamradt
  * @param <T> the type to accept
  * @since 1.0.0
@@ -36,15 +37,15 @@ import java.util.function.Consumer;
 public class PossiblyConsumer<T> implements Consumer<T> {
     /**
      * Replacement for Consumer type except it adds throws Exception to the accept method.
-     * Used to allow a method that throws a function. This class wraps this
-     * interface to create a Possibly type with a value or and exception
+     * Used to allow a method that throws an exception. This class wraps this
+     * interface to allow handing of exceptions.
      */
     private final ExceptionConsumer<T> f;
     private final Consumer<Exception> e; 
     /** 
      * Create a PossiblySuppier that wraps the ExceptionConsumer
      * @param f the ExceptionConsumer to wrap
-     * @param e a Consumer to do something with an exception
+     * @param e a Consumer to do something with an exception, or null to ignore
      */
     private PossiblyConsumer(final ExceptionConsumer<T> f,
             final Consumer<Exception> e) {

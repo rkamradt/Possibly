@@ -23,8 +23,6 @@
  */
 package io.github.rkamradt.possibly;
 
-import static io.github.rkamradt.possibly.PossiblyConsumerTest.BAD_VALUE;
-import static io.github.rkamradt.possibly.PossiblyConsumerTest.GOOD_VALUE;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
