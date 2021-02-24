@@ -60,7 +60,7 @@ public class PossiblyConsumer<T> implements Consumer<T> {
      * @param e a consumer for exceptions
      * @return A new PossiblyConsumer
      */
-     static <T> PossiblyConsumer<T> of(final ExceptionConsumer<T> f,
+     static public <T> PossiblyConsumer<T> of(final ExceptionConsumer<T> f,
              final Consumer<Exception> e) {
         return new PossiblyConsumer<>(f, e);
     }
@@ -70,7 +70,7 @@ public class PossiblyConsumer<T> implements Consumer<T> {
      * @param f The wrapped Consumer
      * @return A new PossiblyConsumer
      */
-     static <T> PossiblyConsumer<T> of(final ExceptionConsumer<T> f) {
+     static public <T> PossiblyConsumer<T> of(final ExceptionConsumer<T> f) {
         return new PossiblyConsumer<>(f, null);
     }
     /** 
@@ -90,9 +90,10 @@ public class PossiblyConsumer<T> implements Consumer<T> {
      * @param <T> The type of value to accept
      */
     @FunctionalInterface
-    interface ExceptionConsumer<T> {
+    public interface ExceptionConsumer<T> {
         /**
          * accept a value
+         * @param value the value to accept
          * @throws Exception to be caught by the wrapping class
          */
         void accept(T value) throws Exception;

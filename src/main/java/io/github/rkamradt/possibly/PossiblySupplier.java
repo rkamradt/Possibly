@@ -53,7 +53,7 @@ public class PossiblySupplier<T> implements Supplier<Possibly<T>> {
      * @param f The wrapped supplier
      * @return A new PossiblySupplier
      */
-     static <T> PossiblySupplier<T> of(final ExceptionSupplier<T> f) {
+     static public <T> PossiblySupplier<T> of(final ExceptionSupplier<T> f) {
         return new PossiblySupplier<>(f);
     }
     /** 
@@ -73,7 +73,7 @@ public class PossiblySupplier<T> implements Supplier<Possibly<T>> {
      * @param <T> The type of value to supply
      */
     @FunctionalInterface
-    interface ExceptionSupplier<T> {
+    public interface ExceptionSupplier<T> {
         /**
          * Get a value from the supplier
          * @return the supplied value

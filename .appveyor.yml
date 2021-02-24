@@ -5,12 +5,12 @@ build_script:
 cache:
 - /home/appveyor/.m2/repository/ -> pom.xml
 artifacts:
-  - path: target/possibly-1.0.0-SNAPSHOT.jar
-    name: Possibly 1.0.0 Snapshot
-  - path: target/possibly-1.0.0-SNAPSHOT-sources.jar
-    name: Possibly Source 1.0 Snapshot
-  - path: target/possibly-1.0.0-SNAPSHOT-javadoc.jar
-    name: Possibly JavaDocs 1.0 Snapshot
+  - path: target/possibly-1.0.1-SNAPSHOT.jar
+    name: Possibly 1.0.1 Snapshot
+  - path: target/possibly-1.0.1-SNAPSHOT-sources.jar
+    name: Possibly Source 1.0.1 Snapshot
+  - path: target/possibly-1.0.1-SNAPSHOT-javadoc.jar
+    name: Possibly JavaDocs 1.0.1 Snapshot
 on_finish:
   - sh: |
       find "$APPVEYOR_BUILD_FOLDER" -type f -name 'TEST*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/junit/$APPVEYOR_JOB_ID"

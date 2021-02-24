@@ -54,11 +54,12 @@ public class PossiblyPredicate<T> implements Predicate<T> {
     }
     /**
      * used to publicly create a PossiblyPredicate
-     * @param <V> The type of value to test
+     * @param <T> The type of value to test
      * @param f The wrapped Predicate
+     * @param e the exception consumer
      * @return A new PossiblyPredicate
      */
-    static <T> PossiblyPredicate<T> of(final ExceptionPredicate<T> f,
+    static public <T> PossiblyPredicate<T> of(final ExceptionPredicate<T> f,
             final Consumer<Exception> e) {
         return new PossiblyPredicate<>(f, e);
     }
@@ -68,7 +69,7 @@ public class PossiblyPredicate<T> implements Predicate<T> {
      * @param f The wrapped Predicate
      * @return A new PossiblyPredicate
      */
-    static <T> PossiblyPredicate<T> of(final ExceptionPredicate<T> f) {
+    static public <T> PossiblyPredicate<T> of(final ExceptionPredicate<T> f) {
         return new PossiblyPredicate<>(f, null);
     }
     /** 

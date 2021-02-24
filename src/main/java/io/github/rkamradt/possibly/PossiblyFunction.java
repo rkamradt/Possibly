@@ -55,7 +55,7 @@ public class PossiblyFunction<V, R> implements Function<V, Possibly<R>> {
      * @param f The wrapped function
      * @return A new PossiblyFunction
      */
-    static <V, R> PossiblyFunction<V, R> of(final ExceptionFunction<V, R> f) {
+    static public <V, R> PossiblyFunction<V, R> of(final ExceptionFunction<V, R> f) {
         return new PossiblyFunction<>(f);
     }
     /** 
